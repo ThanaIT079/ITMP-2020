@@ -1,6 +1,6 @@
 [
         {
-            "id" : "1",
+            "id" : 1,
             "gender" : "Femel",
             "lastName" : "Davolio",
             "firstName" : "Nancy",
@@ -8,7 +8,7 @@
             "address" : "507 - 20th Ave. E. Apt. 2A"
         },
         {
-            "id" : "2",
+            "id" : 2,
             "gender" : "Male", 
             "lastName" : "Fuller",
             "firstName" : "Andrew",
@@ -16,7 +16,7 @@
             "address" : "908 W. Capital Way"
         },
         {
-            "id" : "3",
+            "id" : 3,
             "gender" : "Femel",
             "lastName" : "Leverling",
             "firstName" : "Janet",
@@ -24,7 +24,7 @@
             "address" : "722 Moss Bay Blvd."
         },
         {
-            "id" : "4",
+            "id" : 4,
             "gender" : "Femel",
             "lastName" : "Peacock",
             "firstName" : "Margaret",
@@ -32,7 +32,7 @@
             "address" : "4110 Old Redmond Rd"
         },
         {
-            "id" : "5",
+            "id" : 5,
             "gender" : "Male",
             "lastName" : "Buchanan",
             "firstName" : "Steven",
@@ -40,7 +40,7 @@
             "address" : "14 Garrett Hill"
         },
         {
-            "id" : "6",
+            "id" : 6,
             "gender" : "Male",
             "lastName" : "Suyama",
             "firstName" : "Michael",
@@ -48,7 +48,7 @@
             "address" : "Coventry House Miner Rd."
         },
         {
-            "id" : "7",
+            "id" : 7,
             "gender" : "Male",
             "lastName" : "King",
             "firstName" : "Robert",
@@ -56,7 +56,7 @@
             "address" : "Edgeham Hollow Winchester Way"
         },
         {
-            "id" : "8",
+            "id" : 8,
             "gender" : "Femel",
             "lastName" : "Callahan",
             "firstName" : "Laura",
@@ -64,7 +64,7 @@
             "address" : "4726 - 11th Ave. N.E"
         },
         {
-            "id" : "9",
+            "id" : 9,
             "gender" : "Femel",
             "lastName" : "Dodsworth",
             "firstName" : "Anne",
