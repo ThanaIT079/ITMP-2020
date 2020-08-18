@@ -1,38 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>The Members - ITKMITL Multimedia Programming 2563</title>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>LAB II : API [Employees] - ITKMITL Multimedia Programming 2563</title>
 
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<link rel="stylesheet" type="text/css" href="lab.css">
-</head>
-<body>
-	<div id="app">
-		
-	</div>
-	
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet" type="text/css" href="lab.css">
+    </head>
+    <body>
+        <div id="app">
+            About Employee
+            
+            <h3> Name     : {{person.lastName}}  {{person.firstName}} </h3>
+            <h3> Gender   : {{person.gender}} </h3>
+            <h3> Position : {{person.position}} </h3>
+            <h3> Address  : {{person.address}} </h3>
+           
 
-	<script>
-		fetch('https://jsonplaceholder.typicode.com/users')
-		.then(response => response.json())
-		.then(json => {console.log(json)})
-		let app = new Vue({
-			el: '#app',
-			data: {
-				users :[],
-				person:{
-					id:0,
-					name:'..loading',
-					username:'..loading',
-					email:'..loading',
-					website:'..loading',
-					company:{
-						name : '..loading',
-					}
-				}	
-			}
-		})
+            Employees
+            <h2 v-for="e in employees" :data-id="e.id" @click="viewBio(e)"> {{e.lastName}} </h2>
+        </div>
+        
 
-	</script>
-</body>
-</html>
+        <script>
+            fetch('https://raw.githubusercontent.com/ThanaIT079/ITMP-2020/master/employee.json')
+            .then(response => response.json())
+            .then(json => {
+                console.log(json)
+                app.employees = json
+                app.person = json[0]
+                })
+
+            let app = new Vue({
+                el: '#app',
+                methods : {
+                    viewBio: function(employ){
+                        this.person = employ
+                    } 
+                },
+                data:{
+                    person : {
+                        "id" : 0,
+                            "gender" : "_____",
+                            "lastName" : "_____",
+                            "firstName" : "_____",
+                            "position" : "_____",
+                            "address" : "_____"
+                    },
+                    employees : [
+                        {
+                            "id" : 1,
+                            "gender" : "_____",
+                            "lastName" : "_____",
+                            "firstName" : "_____",
+                            "position" : "_____",
+                            "address" : "_____"
+                        }
+                    ]
+                    
+                }
+            })
+            // function viewBio(h2){
+            //     let id = h2.dataset.id;
+            //     app.person = app.employees[id-1]
+            //     console.log(id)
+            // }
+        </script>
+    </body>
+    </html>
