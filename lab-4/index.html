@@ -9,34 +9,42 @@
 <body>
 	<div id="canvas">
 		<section id="canvas_header">
-			<div>
-				เหลือเวลา 10 วินาที
-			</div>
+            <div id="process">
+                <div id="processing">
+                </div>
+            </div>
+
+            
 		</section>
 		<section id="canvas_main">
 			<main>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot style="--l:80%"></a-dot>
-				<a-dot data-pick="true"></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
+                <a-dot v-for="i in row*row"
+				:style="{
+					'--row':row,
+					'--h':h,
+					'--l':l+'%',
+					
+				}":data-pick= "i == pick"
+				@click="check(i == pick)"
+				></a-dot>
+				
 			</main>
 		</section>
 		<section id="canvas_footer">
-			<div>
-				0 คะแนน
-			</div>
+            <div>
+                Remains : {{time}} S
+                <div>
+                    {{score}} Points
+                </div>
+                
+            </div>
 		</section>
 	</div>
 
 	<script>
-		let picklight = "20%" //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
-		document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
-
+		let picklight = "10%" //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
+		// document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
+        
 		function rand(start,stop){//สร้างฟังก์ชัน random ไว้ใช้
 			let shift = (stop-start)+1
 			return Math.floor(Math.random()*100%shift)+start
@@ -45,21 +53,78 @@
 		let app = new Vue({
 			el:'#canvas',
 			data:{
-				row:2, //จำนวนแถวที่จะมีในรอบนี้
-				h:330, // hue ในรอบนี้
-				time:10, //เวลาเริ่มต้น
+				row:3, //จำนวนแถวที่จะมีในรอบนี้
+				h:1, // hue ในรอบนี้
+				time:20, //เวลาเริ่มต้น
 				score:0, //คะแนนเริ่มต้น
 				pick:1, //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
-				l:30,//ความสว่างของสีทั่วไปในรอบนี้
+				l:40,//ความสว่างของสีทั่วไปในรอบนี้
+                process:0,
+                cap:3
 			},
 			methods: {
+                check: function(i){
+                    if (this.time > 0){
+                        if(i == true){
+                            this.correct()
+                            if(this.cap < 8){
+                                this.process+=10
+                            }
+                            else{
+                                this.process=100 
+                            }
+                            this.h = rand(rand(100,200),rand(300,400))
+                            document.getElementById("processing").style.width = this.process + "%";
+                            
+                            if(this.process == 100 & this.cap < 8){
+                                this.cap++
+                                this.process = 0
+                            }
+                        }
+                        else{
+                            this.notthatdot()
+                        }
+                    }
+                    
+
+                    // Check true or flase
+                },
+                correct: function(){
+                    this.row = this.cap//rand(this.cap-1,this.cap)
+                    this.pick = rand(1,this.row*this.row)
+                    this.score++
+                    
+                    
+                    if(app.time < 20){
+                        app.time++
+                    }
+                    console.log('Correct!')
+                    console.log('Process = '+ this.process)
+                },
+                notthatdot: function(){
+                    if(this.score > 0){
+                        this.score--
+                    }
+                    if(app.time > 5){
+                        app.time-=5
+                    }
+                    else{
+                        app.time--
+                    }
+                    if(this.process != 0){
+                        this.process-=10
+                    }
+                    
+                    document.getElementById("processing").style.width = this.process + "%";
+                    console.log('Incorrect!')
+                }
 
 			}
 		})
 		//ทำให้แคนวาสมี --picklight ตามที่กำหนดไว้ข้างบนนี้
 		document.querySelector('#canvas').style.setProperty('--picklight',picklight);
 		
-		let counter = setInterval(()=>{
+		let counter = setInterval(()=>{// ทุกๆ
 			if (app.time>0) {
 				app.time--
 			}else{
