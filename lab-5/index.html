@@ -10,7 +10,7 @@
 	<div id="canvas">
 		<section id="canvas_header">
 			<div>
-				-- แสดงคะแนน
+				You separated resources {{score}} times
 			</div>
 		</section>
 		<section id="canvas_main" 
@@ -19,49 +19,108 @@
 				<div class="box _path" 
 				v-for="i in 14" 
 				:data-pst="i"></div>
-				<div class="box _toggle" data-pst="10" data-isrightarrow="1"></div>
+				<div class="box _toggle" data-pst="10" :data-isRightArrow="isRightArrow"></div>
 
-				<div class="box _fruit"></div>
+				<div class="box _resource" v-for="r in resources" :data-pst="r.pst" :data-mat="r.mat"></div>
 
 				<div class="box _origin"></div>
 				<div class="box _12" data-pst="12"></div>
 				<div class="box _16" data-pst="16"></div>
 				
-			</main>
+            </main>
 		</section>
 		<section id="canvas_footer">
-			<div v-if="play" class="btn" id="toggle">
-				Toggle
-			</div>
-			<div v-if="!play" class="btn" id="endgame">
-				Ene Game
-			</div>
-		</section>
-	</div>
-
+			<div v-if="play" class="btn" id="toggle" @click="change()">
+				Switch !
+            </div>
+			<div v-if="!play" class="btn" id="endgame" onClick="window.location.reload()">
+				Play Agin !
+            </div>
+        </section>
+    </div>
+</div>
+    
 	<script>
 		function rand(start,stop){
 			let shift = (stop-start)+1
 			return Math.floor(Math.random()*100%shift)+start
 		}
 		
-		let fruitCount = 5
+		let nextResourceId = 4
 		let isRightArrow = 1
-		let speed = 1000
 		let app = new Vue({
 			el:'#canvas',
 			data:{
+                isRightArrow: isRightArrow,
 				play:true,
-				time:0,
+				// time:20,
 				score:0,
-				fruits:[
-					{id:1,type:13,pst:6,run:true,step:1},
-					{id:2,type:11,pst:3,run:true,step:1},
-					{id:3,type:11,pst:2,run:true,step:1},
-					{id:4,type:13,pst:1,run:true,step:1},
-				]
-			}
+                turn:0,
+				resources:[
+					{id:1,mat:1,pst:6,run:true,step:1},
+					{id:2,mat:2,pst:3,run:true,step:1},
+					{id:3,mat:2,pst:2,run:true,step:1},
+				] // 1 = oil , 2 = code
+			},
+            methods:{
+                create:function(){
+                    this.resources.push({'id':nextResourceId,'mat':rand(1,2),'pst':0,'run':true,'step':1})
+                    this.nextResourceId++
+                },
+                move:function(){
+                    if(this.play == true){
+                        for(i = 0; i < this.resources.length; i++){
+                            if (this.resources[i].pst < 9){
+                                this.resources[i].pst = this.resources[i].pst + 1
+                            }
+                            else if (this.resources[i].pst == 9){
+                                this.resources[i].pst = this.resources[i].pst + 1
+                                document.getElementsByClassName('_resource')[i].style.opacity = '0.2';
+                            }
+                            else if(this.resources[i].pst == 10 & this.isRightArrow == 1 ||  this.resources[i].pst == 13){
+                                document.getElementsByClassName('_resource')[i].style.opacity = '1';
+                                this.resources[i].pst = this.resources[i].pst + 3
+                            }
+                            else if(this.resources[i].pst == 10 & this.isRightArrow == 0 || this.resources[i].pst == 11){
+                                document.getElementsByClassName('_resource')[i].style.opacity = '1';
+                                this.resources[i].pst = this.resources[i].pst + 1
+                            }
+                            if ((this.resources[i].pst == 11 & this.resources[i].mat == 2) || 
+                                (this.resources[i].pst == 13 & this.resources[i].mat == 1)){
+                                    this.score++
+                                    if(this.score == 50){
+                                        this.play= false;
+                                    }
+						    }
+                            if((this.resources[i].pst == 12 & this.resources[i].mat == 2) || 
+                                (this.resources[i].pst == 13 & this.resources[i].mat == 1)){
+                                    this.resources[i].run = false
+                                }
+                            if((this.resources[i].pst == 12 & this.resources[i].mat == 1) || 
+                                (this.resources[i].pst == 13 & this.resources[i].mat == 2)){
+                                    this.play= false;
+                            }
+                        }
+                    }
+                },
+                change:function(){
+                    if(this.isRightArrow == 1){
+                        this.isRightArrow = 0
+                    }else{
+                        this.isRightArrow = 1
+                    }
+                },
+            }
 		})
+        let playing = setInterval(function(){
+            if(app.play == true){
+                app.turn++
+                app.create()
+                app.move()
+            }
+            
+        }, 500)
+        
 	</script>
 </body>
 </html>
